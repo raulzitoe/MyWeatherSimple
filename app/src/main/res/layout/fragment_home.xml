@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="model"
+            type="com.example.myweathersimple.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_blue"
-        tools:context=".HomeFragment">
+        tools:context=".home.HomeFragment">
 
         <TextView
             android:id="@+id/tv_city"
@@ -59,7 +61,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_weather_now"
-            tools:text="28°" />
+            android:text="@{String.valueOf(model.weather.main.temp)}" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_wind_humidity"
