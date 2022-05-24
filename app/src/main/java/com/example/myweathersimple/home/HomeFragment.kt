@@ -19,15 +19,15 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
-        binding.model = viewModel
+        binding.viewModel = viewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //binding.homeViewModel?.getWeather()
-        viewModel.getWeatherData()
+        viewModel.requestWeatherData()
+//        viewModel.determineWeatherIcon("04d")
     }
 
 }

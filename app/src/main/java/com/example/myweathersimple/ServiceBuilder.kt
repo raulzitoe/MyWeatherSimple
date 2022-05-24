@@ -16,8 +16,6 @@ object ServiceBuilder {
         return Retrofit.Builder().baseUrl("https://api.openweathermap.org/data/2.5/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client.build())
-            // we need to add converter factory to
-            // convert JSON object to Java object
             .build()
     }
 }

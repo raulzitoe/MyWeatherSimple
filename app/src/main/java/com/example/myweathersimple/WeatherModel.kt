@@ -1,10 +1,19 @@
 package com.example.myweathersimple
 
-import androidx.lifecycle.MutableLiveData
-
 
 data class WeatherModel(
-    val main: Main
+    var weather: List<Weather>,
+    var main: Main,
+    var visibility: Int,
+    var wind: Wind
+
+)
+
+data class Weather (
+    var id: Int,
+    var main: String,
+    var description: String,
+    var icon: String
 )
 
 data class Main(
@@ -15,3 +24,8 @@ data class Main(
     var pressure: Int,
     var humidity: Int
 )
+
+data class Wind (
+    var speed: Double,
+    var deg: Int
+        )
