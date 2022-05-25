@@ -7,11 +7,20 @@ import retrofit2.http.Query
 interface ApiInterface {
 
     @GET("weather")
-    suspend fun getWeather(
+    suspend fun requestWeather(
         @Query("lat") latitude: String,
         @Query("lon") longitude: String,
         @Query("units") units: String = "metric",
         @Query("appid") key: String
     ): Response<WeatherModel>
+
+    @GET("forecast")
+    suspend fun requestForecast(
+        @Query("lat") latitude: String,
+        @Query("lon") longitude: String,
+        @Query("units") units: String = "metric",
+        @Query("cnt") count: String,
+        @Query("appid") key: String
+    ): Response<ForecastModel>
 
 }

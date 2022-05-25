@@ -20,24 +20,26 @@
             android:id="@+id/tv_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
             android:fontFamily="@font/nunito_sans_semibold"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="32sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Sorocaba" />
+            tools:text="Sorocaba"
+            android:text="@{viewModel.weatherData.name}"/>
 
         <ImageView
             android:id="@+id/iv_weather_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            tools:src="@drawable/ic_sunny"
             app:imageResource="@{viewModel.weatherIcon}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_city" />
+            app:layout_constraintTop_toBottomOf="@id/tv_city"
+            tools:src="@drawable/ic_01d" />
 
         <TextView
             android:id="@+id/tv_weather_now"
@@ -67,6 +69,121 @@
             app:layout_constraintTop_toBottomOf="@id/tv_weather_now"
             tools:text="28°" />
 
+        <ImageView
+            android:id="@+id/iv_min_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_min_temp"
+            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_temperature" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Min"
+            app:layout_constraintEnd_toStartOf="@+id/iv_max_temp"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/iv_min_temp"
+            app:layout_constraintTop_toTopOf="@id/iv_min_temp"
+            android:layout_marginHorizontal="10dp"
+            android:fontFamily="@font/nunito_sans_bold"
+            android:textColor="@color/white"
+            android:layout_marginTop="5dp"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_min_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="32°"
+            android:text='@{String.format(" %.0f°", viewModel.weatherData.main.temp_min)}'
+            android:fontFamily="@font/nunito_sans_bold"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/textView"
+            app:layout_constraintEnd_toEndOf="@id/textView"
+            app:layout_constraintTop_toBottomOf="@id/textView"/>
+
+        <ImageView
+            android:id="@+id/iv_max_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_max_temp"
+            app:layout_constraintEnd_toStartOf="@+id/textView2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@id/iv_min_temp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Max"
+            app:layout_constraintEnd_toStartOf="@+id/iv_feels_like"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/iv_max_temp"
+            app:layout_constraintTop_toTopOf="@id/iv_min_temp"
+            android:layout_marginHorizontal="10dp"
+            android:fontFamily="@font/nunito_sans_bold"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/tv_max_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="32°"
+            android:text='@{String.format(" %.0f°", viewModel.weatherData.main.temp_max)}'
+            android:fontFamily="@font/nunito_sans_bold"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/textView2"
+            app:layout_constraintEnd_toEndOf="@id/textView2"
+            app:layout_constraintTop_toBottomOf="@id/textView2"/>
+
+        <ImageView
+            android:id="@+id/iv_feels_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_feels_like"
+            app:layout_constraintEnd_toStartOf="@+id/textView3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="@id/iv_min_temp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feels Like"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/iv_feels_like"
+            app:layout_constraintTop_toTopOf="@id/iv_min_temp"
+            android:fontFamily="@font/nunito_sans_bold"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/tv_feels_like_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="32°"
+            android:text='@{String.format(" %.0f°", viewModel.weatherData.main.feels_like)}'
+            android:fontFamily="@font/nunito_sans_bold"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/textView3"
+            app:layout_constraintEnd_toEndOf="@id/textView3"
+            app:layout_constraintTop_toBottomOf="@id/textView3"/>
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_wind_humidity"
             android:layout_width="0dp"
@@ -75,7 +192,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_temperature">
+            app:layout_constraintTop_toBottomOf="@id/iv_min_temp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -154,13 +271,13 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_sans_semibold"
-                    tools:text="100%"
                     android:text="@{String.valueOf(viewModel.weatherData.main.humidity) + '%'}"
                     android:textColor="@color/text_primary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/guideline2"
                     app:layout_constraintStart_toEndOf="@id/guideline1"
-                    app:layout_constraintTop_toBottomOf="@id/humidity_column" />
+                    app:layout_constraintTop_toBottomOf="@id/humidity_column"
+                    tools:text="100%" />
 
                 <TextView
                     android:id="@+id/visibility_column"
@@ -185,12 +302,12 @@
                     android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_sans_semibold"
                     android:text='@{String.format("%.1f Km", Float.valueOf(viewModel.weatherData.visibility)/1000)}'
-                    tools:text="16 Km"
                     android:textColor="@color/text_primary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/guideline3"
                     app:layout_constraintStart_toEndOf="@id/guideline2"
-                    app:layout_constraintTop_toBottomOf="@id/visibility_column" />
+                    app:layout_constraintTop_toBottomOf="@id/visibility_column"
+                    tools:text="16 Km" />
 
                 <TextView
                     android:id="@+id/UV_column"
@@ -199,7 +316,7 @@
                     android:layout_marginHorizontal="12dp"
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/nunito_sans_semibold"
-                    android:text="UV"
+                    android:text="Clouds"
                     android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -214,7 +331,8 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_sans_semibold"
-                    android:text="Weak"
+                    tools:text="30%"
+                    android:text="@{String.valueOf(viewModel.weatherData.clouds.all)+'%'}"
                     android:textColor="@color/text_primary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -224,13 +342,16 @@
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_forecast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/card_wind_humidity"
-            tools:listitem="@layout/item_recycler_home" />
+            tools:listitem="@layout/item_recycler_home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="60dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myweathersimple.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -25,9 +27,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val recyclerView: RecyclerView = binding.recyclerviewForecast
 
-        viewModel.requestWeatherData()
-//        viewModel.determineWeatherIcon("04d")
+        viewModel.requestWeatherAndForecastData()
+        viewModel.forecastData.observe(viewLifecycleOwner) { forecastModel ->
+            recyclerView.adapter = HomeAdapter(forecastModel.list)
+        }
+
+
     }
 
 }

@@ -5,7 +5,9 @@ data class WeatherModel(
     var weather: List<Weather>,
     var main: Main,
     var visibility: Int,
-    var wind: Wind
+    var wind: Wind,
+    var name: String,
+    var clouds: Clouds
 
 )
 
@@ -29,3 +31,7 @@ data class Wind (
     var speed: Double,
     var deg: Int
         )
+
+data class Clouds(
+    var all: Int
+)
