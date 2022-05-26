@@ -13,7 +13,7 @@ object ServiceBuilder {
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
         if(BuildConfig.DEBUG) client.addInterceptor(logging)
-        return Retrofit.Builder().baseUrl("https://api.openweathermap.org/data/2.5/")
+        return Retrofit.Builder().baseUrl("https://api.openweathermap.org/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client.build())
             .build()

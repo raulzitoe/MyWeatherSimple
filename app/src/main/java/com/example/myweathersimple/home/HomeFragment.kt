@@ -1,13 +1,20 @@
 package com.example.myweathersimple.home
 
 import android.os.Bundle
+import android.view.*
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.inputmethod.EditorInfo
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myweathersimple.AutocompleteModel
+import com.example.myweathersimple.Coordinates
+import com.example.myweathersimple.LocationSearchAdapter
+import com.example.myweathersimple.R
 import com.example.myweathersimple.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -22,19 +29,62 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.top_app_bar, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView: RecyclerView = binding.recyclerviewForecast
+        val myActivity = (activity as AppCompatActivity)
 
+        myActivity.setSupportActionBar(binding.homeTopAppBar)
+        binding.recyclerviewSearch.adapter = LocationSearchAdapter(listener = object : LocationSearchAdapter.ItemListener{
+            override fun itemClick(item: AutocompleteModel) {
+                viewModel.coordinates.value?.latitude = item.latitude.toDouble()
+                viewModel.coordinates.value?.longitude = item.longitude.toDouble()
+                viewModel.requestWeatherAndForecastData()
+            }
+        })
+
+
+
+        binding.homeTopAppBar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.search ->{
+                    binding.searchLocationLayout.isVisible = !binding.searchLocationLayout.isVisible
+                    true
+                }
+                else -> false
+            }
+        }
+        viewModel.coordinates.value = Coordinates(43.65, -79.38)
         viewModel.requestWeatherAndForecastData()
         viewModel.forecastData.observe(viewLifecycleOwner) { forecastModel ->
             recyclerView.adapter = HomeAdapter(forecastModel.list)
         }
+        viewModel.coordinates.observe(viewLifecycleOwner) {
 
+        }
 
+        binding.searchLocation.setOnEditorActionListener { _, actionId, _ ->
+            val query = binding.searchLocation.text.toString()
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                viewModel.requestLocationData(query)
+                false
+            } else {
+                false
+            }
+        }
+
+        viewModel.locationData.observe(viewLifecycleOwner) {
+            (binding.recyclerviewSearch.adapter as LocationSearchAdapter).items = it
+            (binding.recyclerviewSearch.adapter as LocationSearchAdapter).notifyDataSetChanged()
+        }
     }
-
 }
