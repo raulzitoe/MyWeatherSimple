@@ -17,24 +17,25 @@ class HomeAdapter(var forecastData: List<Forecast>) :
 
         fun bind(position: Int) {
             val data = forecastData[position]
-            with(binding){
+            with(binding) {
                 tvCardHeader.text = getDayOfWeekFromTimestamp(data.dt)
                 tvCardHour.text = getHourFromTimestamp(data.dt)
                 tvCardCondition.text = data.weather[0].main
-                tvCardTemperature.text = String.format("%.0f°",data.main.temp)
+                tvCardTemperature.text = String.format("%.0f°", data.main.temp)
                 ivCardIcon.setImageResource(getWeatherIcon(data.weather[0].icon))
             }
         }
+
         private fun getDayOfWeekFromTimestamp(timestamp: Long): String {
             return SimpleDateFormat("EEE", Locale.ENGLISH).format(timestamp * 1000)
         }
 
-        private fun getHourFromTimestamp(timestamp: Long): String{
+        private fun getHourFromTimestamp(timestamp: Long): String {
             return SimpleDateFormat("Ha", Locale.ENGLISH).format(timestamp * 1000)
         }
 
-        private fun getWeatherIcon(iconID: String): Int{
-            return when(iconID){
+        private fun getWeatherIcon(iconID: String): Int {
+            return when (iconID) {
                 "01d" -> R.drawable.ic_01d
                 "02d" -> R.drawable.ic_02d
                 "03d" -> R.drawable.ic_03d

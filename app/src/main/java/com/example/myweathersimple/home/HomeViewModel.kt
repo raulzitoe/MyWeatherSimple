@@ -1,7 +1,5 @@
 package com.example.myweathersimple.home
 
-
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myweathersimple.*
@@ -16,29 +14,32 @@ class HomeViewModel : ViewModel() {
     var weatherIcon = MutableLiveData<Int>()
     var coordinates = MutableLiveData<Coordinates>()
     var locationData = MutableLiveData<List<AutocompleteModel>>()
-    val service = ServiceBuilder.getInstance().create(ApiInterface::class.java)
-    val apiKey = BuildConfig.apiKey
+    var city = MutableLiveData<String>()
+    var state = MutableLiveData<String>()
+    var country = MutableLiveData<String>()
+    private val service: ApiInterface =
+        ServiceBuilder.getInstance().create(ApiInterface::class.java)
+    private val apiKey = BuildConfig.apiKey
 
     fun requestWeatherAndForecastData() {
         uiScope.launch {
-            val result = service.requestWeather(
+            service.requestWeather(
                 coordinates.value?.latitude.toString(),
                 coordinates.value?.longitude.toString(),
                 "metric",
                 apiKey
-            )
-            val forecast = service.requestForecast(
+            ).body()?.let {
+                weatherData.postValue(it)
+                determineWeatherIcon(it.weather[0].icon)
+            }
+
+            service.requestForecast(
                 coordinates.value?.latitude.toString(),
                 coordinates.value?.latitude.toString(),
                 "metric",
                 "24",
                 apiKey
-            )
-            // Checking the results
-            Log.d("test: ", result.body().toString())
-            weatherData.postValue(result.body())
-            forecastData.postValue(forecast.body())
-            weatherData.value?.weather?.get(0)?.let { determineWeatherIcon(it.icon) }
+            ).body()?.let { forecastData.postValue(it) }
         }
     }
 

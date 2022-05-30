@@ -40,19 +40,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerView: RecyclerView = binding.recyclerviewForecast
         val myActivity = (activity as AppCompatActivity)
 
         myActivity.setSupportActionBar(binding.homeTopAppBar)
-        binding.recyclerviewSearch.adapter = LocationSearchAdapter(listener = object : LocationSearchAdapter.ItemListener{
-            override fun itemClick(item: AutocompleteModel) {
-                viewModel.coordinates.value?.latitude = item.latitude.toDouble()
-                viewModel.coordinates.value?.longitude = item.longitude.toDouble()
-                viewModel.requestWeatherAndForecastData()
-            }
-        })
-
-
 
         binding.homeTopAppBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
@@ -63,19 +53,33 @@ class HomeFragment : Fragment() {
                 else -> false
             }
         }
-        viewModel.coordinates.value = Coordinates(43.65, -79.38)
+
+        binding.recyclerviewSearch.adapter = LocationSearchAdapter(listener = object : LocationSearchAdapter.ItemListener{
+            override fun itemClick(item: AutocompleteModel) {
+                binding.recyclerviewSearch.isVisible = false
+                binding.searchLocationLayout.isVisible = false
+                with(viewModel){
+                    coordinates.value?.latitude = item.latitude.toDouble()
+                    coordinates.value?.longitude = item.longitude.toDouble()
+                    requestWeatherAndForecastData()
+                    city.value = item.city_name
+                    state.value = item.state_name
+                    country.value = item.country_name
+                }
+            }
+        })
+
+        viewModel.coordinates.value = Coordinates(43.6553, -79.4578)
         viewModel.requestWeatherAndForecastData()
         viewModel.forecastData.observe(viewLifecycleOwner) { forecastModel ->
-            recyclerView.adapter = HomeAdapter(forecastModel.list)
-        }
-        viewModel.coordinates.observe(viewLifecycleOwner) {
-
+            binding.recyclerviewForecast.adapter = HomeAdapter(forecastModel.list)
         }
 
         binding.searchLocation.setOnEditorActionListener { _, actionId, _ ->
             val query = binding.searchLocation.text.toString()
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.requestLocationData(query)
+                binding.recyclerviewSearch.isVisible = true
                 false
             } else {
                 false
