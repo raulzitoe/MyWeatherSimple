@@ -1,26 +1,32 @@
 package com.example.myweathersimple.home
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.*
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.example.myweathersimple.AutocompleteModel
-import com.example.myweathersimple.Coordinates
 import com.example.myweathersimple.LocationSearchAdapter
 import com.example.myweathersimple.R
 import com.example.myweathersimple.databinding.FragmentHomeBinding
+import java.util.*
+
 
 class HomeFragment : Fragment() {
-
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
+    val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) viewModel.requestLastLocation()
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +39,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_app_bar, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -44,9 +51,26 @@ class HomeFragment : Fragment() {
 
         myActivity.setSupportActionBar(binding.homeTopAppBar)
 
+//        val gcd = Geocoder(context, Locale.getDefault())
+//        val addresses: List<Address> = gcd.getFromLocation(43.6553, -79.4578, 5)
+//        val risos: List<Address> = gcd.getFromLocationName("Toronto", 5)
+
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            return
+        }
+
         binding.homeTopAppBar.setOnMenuItemClickListener { menuItem ->
-            when(menuItem.itemId){
-                R.id.search ->{
+            when (menuItem.itemId) {
+                R.id.search -> {
                     binding.searchLocationLayout.isVisible = !binding.searchLocationLayout.isVisible
                     true
                 }
@@ -54,22 +78,23 @@ class HomeFragment : Fragment() {
             }
         }
 
-        binding.recyclerviewSearch.adapter = LocationSearchAdapter(listener = object : LocationSearchAdapter.ItemListener{
-            override fun itemClick(item: AutocompleteModel) {
-                binding.recyclerviewSearch.isVisible = false
-                binding.searchLocationLayout.isVisible = false
-                with(viewModel){
-                    coordinates.value?.latitude = item.latitude.toDouble()
-                    coordinates.value?.longitude = item.longitude.toDouble()
-                    requestWeatherAndForecastData()
-                    city.value = item.city_name
-                    state.value = item.state_name
-                    country.value = item.country_name
+        binding.recyclerviewSearch.adapter =
+            LocationSearchAdapter(listener = object : LocationSearchAdapter.ItemListener {
+                override fun itemClick(item: AutocompleteModel) {
+                    binding.recyclerviewSearch.isVisible = false
+                    binding.searchLocationLayout.isVisible = false
+                    with(viewModel) {
+                        coordinates.value?.latitude = item.latitude.toDouble()
+                        coordinates.value?.longitude = item.longitude.toDouble()
+                        requestWeatherAndForecastData()
+                        city.value = item.city_name
+                        state.value = item.state_name
+                        country.value = item.country_name
+                    }
                 }
-            }
-        })
+            })
 
-        viewModel.coordinates.value = Coordinates(43.6553, -79.4578)
+//        viewModel.coordinates.value = Coordinates(43.6553, -79.4578)
         viewModel.requestWeatherAndForecastData()
         viewModel.forecastData.observe(viewLifecycleOwner) { forecastModel ->
             binding.recyclerviewForecast.adapter = HomeAdapter(forecastModel.list)

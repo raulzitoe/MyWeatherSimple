@@ -1,13 +1,19 @@
 package com.example.myweathersimple.home
 
+import android.annotation.SuppressLint
+import android.app.Application
+import android.location.Location
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.myweathersimple.*
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+@SuppressLint("MissingPermission")
+class HomeViewModel(private val appContext: Application) : AndroidViewModel(appContext) {
     private val uiScope = CoroutineScope(Dispatchers.IO)
     val weatherData = MutableLiveData<WeatherModel>()
     val forecastData = MutableLiveData<ForecastModel>()
@@ -20,6 +26,11 @@ class HomeViewModel : ViewModel() {
     private val service: ApiInterface =
         ServiceBuilder.getInstance().create(ApiInterface::class.java)
     private val apiKey = BuildConfig.apiKey
+    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(appContext)
+
+    init {
+        requestLastLocation()
+    }
 
     fun requestWeatherAndForecastData() {
         uiScope.launch {
@@ -50,6 +61,16 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun requestReverseLocation(latitude: Double, longitude:Double){
+        uiScope.launch {
+            val result = service.requestReverseLocation(latitude.toString(), longitude.toString(), "5", apiKey)
+            var cityInfo: List<AutocompleteModel> = result.body()!!
+            city.postValue(cityInfo[0].city_name)
+            state.postValue(cityInfo[0].state_name)
+            country.postValue(cityInfo[0].country_name)
+        }
+    }
+
     private fun determineWeatherIcon(iconID: String) {
         weatherIcon.postValue(
             when (iconID) {
@@ -74,5 +95,18 @@ class HomeViewModel : ViewModel() {
                 else -> R.drawable.ic_01d
             }
         )
+    }
+
+    fun requestLastLocation(){
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                // Got last known location. In some rare situations this can be null.
+                if (location != null) {
+                    Log.e("teste", "lat: ${location.latitude}, lon: ${location.longitude}")
+                    coordinates.value = Coordinates(location.latitude, location.longitude)
+                    requestWeatherAndForecastData()
+                    requestReverseLocation(location.latitude, location.longitude)
+                }
+            }
     }
 }

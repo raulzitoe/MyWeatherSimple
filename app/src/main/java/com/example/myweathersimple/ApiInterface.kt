@@ -26,7 +26,15 @@ interface ApiInterface {
     @GET("geo/1.0/direct")
     suspend fun requestLocation(
         @Query("q") query: String,
-        @Query("limit") count: String,
+        @Query("limit") limit: String,
+        @Query("appid") key: String
+    ): Response<List<AutocompleteModel>>
+
+    @GET("geo/1.0/reverse")
+    suspend fun requestReverseLocation(
+        @Query("lat") latitude: String,
+        @Query("lon") longitude: String,
+        @Query("limit") limit: String,
         @Query("appid") key: String
     ): Response<List<AutocompleteModel>>
 
