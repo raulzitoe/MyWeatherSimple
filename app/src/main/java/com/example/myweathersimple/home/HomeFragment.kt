@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,6 +14,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 import com.example.myweathersimple.AutocompleteModel
 import com.example.myweathersimple.LocationSearchAdapter
 import com.example.myweathersimple.R
@@ -51,11 +54,6 @@ class HomeFragment : Fragment() {
 
         myActivity.setSupportActionBar(binding.homeTopAppBar)
 
-//        val gcd = Geocoder(context, Locale.getDefault())
-//        val addresses: List<Address> = gcd.getFromLocation(43.6553, -79.4578, 5)
-//        val risos: List<Address> = gcd.getFromLocationName("Toronto", 5)
-
-
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -72,6 +70,14 @@ class HomeFragment : Fragment() {
             when (menuItem.itemId) {
                 R.id.search -> {
                     binding.searchLocationLayout.isVisible = !binding.searchLocationLayout.isVisible
+                    true
+                }
+                R.id.gps_location ->{
+                    Log.e("test", "gps clicked")
+                    true
+                }
+                R.id.favorites -> {
+                    Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_favoritesFragment)
                     true
                 }
                 else -> false
@@ -114,6 +120,10 @@ class HomeFragment : Fragment() {
         viewModel.locationData.observe(viewLifecycleOwner) {
             (binding.recyclerviewSearch.adapter as LocationSearchAdapter).items = it
             (binding.recyclerviewSearch.adapter as LocationSearchAdapter).notifyDataSetChanged()
+        }
+
+        binding.cbFavorite.setOnClickListener {
+            viewModel.saveCurrentLocationToFavorites()
         }
     }
 }

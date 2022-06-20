@@ -46,7 +46,7 @@ class HomeViewModel(private val appContext: Application) : AndroidViewModel(appC
 
             service.requestForecast(
                 coordinates.value?.latitude.toString(),
-                coordinates.value?.latitude.toString(),
+                coordinates.value?.longitude.toString(),
                 "metric",
                 "24",
                 apiKey
@@ -61,9 +61,14 @@ class HomeViewModel(private val appContext: Application) : AndroidViewModel(appC
         }
     }
 
-    fun requestReverseLocation(latitude: Double, longitude:Double){
+    fun requestReverseLocation(latitude: Double, longitude: Double) {
         uiScope.launch {
-            val result = service.requestReverseLocation(latitude.toString(), longitude.toString(), "5", apiKey)
+            val result = service.requestReverseLocation(
+                latitude.toString(),
+                longitude.toString(),
+                "5",
+                apiKey
+            )
             var cityInfo: List<AutocompleteModel> = result.body()!!
             city.postValue(cityInfo[0].city_name)
             state.postValue(cityInfo[0].state_name)
@@ -97,7 +102,7 @@ class HomeViewModel(private val appContext: Application) : AndroidViewModel(appC
         )
     }
 
-    fun requestLastLocation(){
+    fun requestLastLocation() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 // Got last known location. In some rare situations this can be null.
@@ -108,5 +113,13 @@ class HomeViewModel(private val appContext: Application) : AndroidViewModel(appC
                     requestReverseLocation(location.latitude, location.longitude)
                 }
             }
+    }
+
+    fun saveCurrentLocationToFavorites() {
+        val location = FavoriteLocation(city.value!!, coordinates.value!!.latitude, coordinates.value!!.longitude)
+            val myModel = SharedPref.instance.favoriteLocations ?: FavoritesModel()
+        myModel.locationsList.add(location)
+
+            SharedPref.instance.favoriteLocations = myModel
     }
 }
