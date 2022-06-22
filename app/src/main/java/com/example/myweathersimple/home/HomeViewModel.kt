@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @SuppressLint("MissingPermission")
-class HomeViewModel(private val appContext: Application) : AndroidViewModel(appContext) {
+class HomeViewModel(appContext: Application) : AndroidViewModel(appContext) {
     private val uiScope = CoroutineScope(Dispatchers.IO)
     val weatherData = MutableLiveData<WeatherModel>()
     val forecastData = MutableLiveData<ForecastModel>()
@@ -61,7 +61,7 @@ class HomeViewModel(private val appContext: Application) : AndroidViewModel(appC
         }
     }
 
-    fun requestReverseLocation(latitude: Double, longitude: Double) {
+    private fun requestReverseLocation(latitude: Double, longitude: Double) {
         uiScope.launch {
             val result = service.requestReverseLocation(
                 latitude.toString(),
@@ -69,7 +69,7 @@ class HomeViewModel(private val appContext: Application) : AndroidViewModel(appC
                 "5",
                 apiKey
             )
-            var cityInfo: List<AutocompleteModel> = result.body()!!
+            val cityInfo: List<AutocompleteModel> = result.body()!!
             city.postValue(cityInfo[0].city_name)
             state.postValue(cityInfo[0].state_name)
             country.postValue(cityInfo[0].country_name)
@@ -121,5 +121,19 @@ class HomeViewModel(private val appContext: Application) : AndroidViewModel(appC
         myModel.locationsList.add(location)
 
             SharedPref.instance.favoriteLocations = myModel
+    }
+
+    fun requestFromFavoritesId(id: Int){
+        val favoritesModel = SharedPref.instance.favoriteLocations
+        val location = favoritesModel?.locationsList?.get(id)
+        if (location != null) {
+            coordinates.value = Coordinates(location.latitude, location.longitude)
+
+            val query = location.name
+            requestLocationData(query)
+            requestWeatherAndForecastData()
+            requestReverseLocation(location.latitude, location.longitude)
+        }
+
     }
 }

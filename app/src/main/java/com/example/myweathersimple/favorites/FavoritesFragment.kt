@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import com.example.myweathersimple.SharedPref
 import com.example.myweathersimple.databinding.FragmentFavoritesBinding
 
@@ -22,7 +23,15 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val favoritesModel = SharedPref.instance.favoriteLocations
-        binding.recyclerFavorites.adapter = favoritesModel?.let { FavoritesAdapter(it) }
+        binding.recyclerFavorites.adapter = favoritesModel?.let {
+            FavoritesAdapter(it, listener = object : FavoritesAdapter.FavoritesItemListener {
+                override fun itemClick(id: Int) {
+                    val action = FavoritesFragmentDirections.actionFavoritesFragmentToHomeFragment2()
+                    action.id = id
+                    Navigation.findNavController(view).navigate(action)
+                }
+            })
+        }
     }
 
 }

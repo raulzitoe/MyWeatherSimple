@@ -15,8 +15,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.NavigationUI
 import com.example.myweathersimple.AutocompleteModel
+import com.example.myweathersimple.Coordinates
 import com.example.myweathersimple.LocationSearchAdapter
 import com.example.myweathersimple.R
 import com.example.myweathersimple.databinding.FragmentHomeBinding
@@ -26,10 +28,11 @@ import java.util.*
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
-    val requestPermissionLauncher =
+    private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) viewModel.requestLastLocation()
         }
+    private val args: HomeFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +44,6 @@ class HomeFragment : Fragment() {
         setHasOptionsMenu(true)
         return binding.root
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_app_bar, menu)
@@ -72,12 +74,14 @@ class HomeFragment : Fragment() {
                     binding.searchLocationLayout.isVisible = !binding.searchLocationLayout.isVisible
                     true
                 }
-                R.id.gps_location ->{
-                    Log.e("test", "gps clicked")
+                R.id.gps_location -> {
+                    viewModel.requestLastLocation()
+                    viewModel.requestWeatherAndForecastData()
                     true
                 }
                 R.id.favorites -> {
-                    Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_favoritesFragment)
+                    Navigation.findNavController(view)
+                        .navigate(R.id.action_homeFragment_to_favoritesFragment2)
                     true
                 }
                 else -> false
@@ -101,7 +105,13 @@ class HomeFragment : Fragment() {
             })
 
 //        viewModel.coordinates.value = Coordinates(43.6553, -79.4578)
-        viewModel.requestWeatherAndForecastData()
+        Log.e("args", args.id.toString())
+        if (args.id == -1) {
+            viewModel.requestWeatherAndForecastData()
+        } else {
+            viewModel.requestFromFavoritesId(args.id)
+        }
+
         viewModel.forecastData.observe(viewLifecycleOwner) { forecastModel ->
             binding.recyclerviewForecast.adapter = HomeAdapter(forecastModel.list)
         }
