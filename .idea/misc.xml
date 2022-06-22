@@ -10,10 +10,10 @@
         <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/drawable/selector_favorite.xml" value="0.362" />
         <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/drawable/selector_home.xml" value="0.3225" />
         <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/layout/activity_main.xml" value="0.4" />
-        <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/layout/fragment_favorites.xml" value="0.2907608695652174" />
+        <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/layout/fragment_favorites.xml" value="0.6" />
         <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/layout/fragment_home.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/layout/fragment_second.xml" value="0.4" />
-        <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/layout/item_favorites.xml" value="0.2907608695652174" />
+        <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/layout/item_favorites.xml" value="0.536" />
         <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/layout/item_recycler_home.xml" value="0.8800000000000001" />
         <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/layout/item_recyclerview_search.xml" value="0.39895833333333336" />
         <entry key="..\:/Users/Raul/Desktop/Android/MyWeatherSimple/app/src/main/res/layout/toggle_favorite.xml" value="0.209375" />

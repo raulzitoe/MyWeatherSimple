@@ -11,4 +11,5 @@
     <color name="text_primary">#272720</color>
     <color name="text_secondary">#979797</color>
     <color name="yellow">#FFC107</color>
+    <color name="gray">#D5D5D5</color>
 </resources>

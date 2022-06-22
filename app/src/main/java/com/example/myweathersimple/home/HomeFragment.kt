@@ -53,7 +53,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val myActivity = (activity as AppCompatActivity)
-
         myActivity.setSupportActionBar(binding.homeTopAppBar)
 
         if (ActivityCompat.checkSelfPermission(
@@ -104,9 +103,9 @@ class HomeFragment : Fragment() {
                 }
             })
 
-//        viewModel.coordinates.value = Coordinates(43.6553, -79.4578)
         Log.e("args", args.id.toString())
         if (args.id == -1) {
+            viewModel.requestLastLocation()
             viewModel.requestWeatherAndForecastData()
         } else {
             viewModel.requestFromFavoritesId(args.id)

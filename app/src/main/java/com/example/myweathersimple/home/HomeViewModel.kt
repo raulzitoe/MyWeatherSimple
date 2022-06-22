@@ -28,9 +28,9 @@ class HomeViewModel(appContext: Application) : AndroidViewModel(appContext) {
     private val apiKey = BuildConfig.apiKey
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(appContext)
 
-    init {
-        requestLastLocation()
-    }
+//    init {
+//        requestLastLocation()
+//    }
 
     fun requestWeatherAndForecastData() {
         uiScope.launch {

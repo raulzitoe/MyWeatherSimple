@@ -8,11 +8,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_favorites"
-            android:layout_height="match_parent"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_favorites"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                tools:listitem="@layout/item_favorites"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        </androidx.cardview.widget.CardView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

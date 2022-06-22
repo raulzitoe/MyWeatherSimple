@@ -3,12 +3,10 @@ package com.example.myweathersimple.favorites
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myweathersimple.Coordinates
-import com.example.myweathersimple.FavoriteLocation
 import com.example.myweathersimple.FavoritesModel
 import com.example.myweathersimple.databinding.ItemFavoritesBinding
 
-class FavoritesAdapter(val favoritesList: FavoritesModel, val listener: FavoritesItemListener) :
+class FavoritesAdapter(var favoritesList: FavoritesModel, val listener: FavoritesItemListener) :
     RecyclerView.Adapter<FavoritesAdapter.FavoritesAdapterViewHolder>() {
 
     inner class FavoritesAdapterViewHolder(private val binding: ItemFavoritesBinding) :
@@ -16,8 +14,11 @@ class FavoritesAdapter(val favoritesList: FavoritesModel, val listener: Favorite
         fun bind(position: Int) {
             with(binding) {
                 locationName.text = favoritesList.locationsList[position].name
-                latitude.text = favoritesList.locationsList[position].latitude.toString()
-                longitude.text = favoritesList.locationsList[position].longitude.toString()
+                latitude.text = "%.2f".format(favoritesList.locationsList[position].latitude)
+                longitude.text = "%.2f".format(favoritesList.locationsList[position].longitude)
+                btnDeleteItem.setOnClickListener {
+                    listener.deleteItem(position)
+                }
                 root.setOnClickListener {
                     listener.itemClick(position)
                 }
@@ -41,5 +42,6 @@ class FavoritesAdapter(val favoritesList: FavoritesModel, val listener: Favorite
 
     interface FavoritesItemListener {
         fun itemClick(id: Int)
+        fun deleteItem(id: Int)
     }
 }
