@@ -28,10 +28,6 @@ class HomeViewModel(appContext: Application) : AndroidViewModel(appContext) {
     private val apiKey = BuildConfig.apiKey
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(appContext)
 
-//    init {
-//        requestLastLocation()
-//    }
-
     fun requestWeatherAndForecastData() {
         uiScope.launch {
             service.requestWeather(
@@ -116,14 +112,18 @@ class HomeViewModel(appContext: Application) : AndroidViewModel(appContext) {
     }
 
     fun saveCurrentLocationToFavorites() {
-        val location = FavoriteLocation(city.value!!, coordinates.value!!.latitude, coordinates.value!!.longitude)
-            val myModel = SharedPref.instance.favoriteLocations ?: FavoritesModel()
+        val location = FavoriteLocation(
+            city.value!!,
+            coordinates.value!!.latitude,
+            coordinates.value!!.longitude
+        )
+        val myModel = SharedPref.instance.favoriteLocations ?: FavoritesModel()
         myModel.locationsList.add(location)
 
-            SharedPref.instance.favoriteLocations = myModel
+        SharedPref.instance.favoriteLocations = myModel
     }
 
-    fun requestFromFavoritesId(id: Int){
+    fun requestFromFavoritesId(id: Int) {
         val favoritesModel = SharedPref.instance.favoriteLocations
         val location = favoritesModel?.locationsList?.get(id)
         if (location != null) {

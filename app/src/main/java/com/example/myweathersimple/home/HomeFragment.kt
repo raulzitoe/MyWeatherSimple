@@ -1,13 +1,13 @@
 package com.example.myweathersimple.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -16,14 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.NavigationUI
 import com.example.myweathersimple.AutocompleteModel
-import com.example.myweathersimple.Coordinates
 import com.example.myweathersimple.LocationSearchAdapter
 import com.example.myweathersimple.R
 import com.example.myweathersimple.databinding.FragmentHomeBinding
-import java.util.*
-
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
@@ -50,6 +46,7 @@ class HomeFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val myActivity = (activity as AppCompatActivity)
@@ -81,6 +78,11 @@ class HomeFragment : Fragment() {
                 R.id.favorites -> {
                     Navigation.findNavController(view)
                         .navigate(R.id.action_homeFragment_to_favoritesFragment2)
+                    true
+                }
+                R.id.save_favorites -> {
+                    viewModel.saveCurrentLocationToFavorites()
+                    Toast.makeText(context, R.string.saved_to_favorites, Toast.LENGTH_LONG).show()
                     true
                 }
                 else -> false
@@ -129,10 +131,6 @@ class HomeFragment : Fragment() {
         viewModel.locationData.observe(viewLifecycleOwner) {
             (binding.recyclerviewSearch.adapter as LocationSearchAdapter).items = it
             (binding.recyclerviewSearch.adapter as LocationSearchAdapter).notifyDataSetChanged()
-        }
-
-        binding.cbFavorite.setOnClickListener {
-            viewModel.saveCurrentLocationToFavorites()
         }
     }
 }

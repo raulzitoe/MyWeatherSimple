@@ -1,5 +1,6 @@
 package com.example.myweathersimple.favorites
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,8 @@ class FavoritesAdapter(var favoritesList: FavoritesModel, val listener: Favorite
 
     inner class FavoritesAdapterViewHolder(private val binding: ItemFavoritesBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        @SuppressLint("SetTextI18n")
         fun bind(position: Int) {
             with(binding) {
                 locationName.text = favoritesList.locationsList[position].name

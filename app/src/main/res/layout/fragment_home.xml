@@ -90,27 +90,11 @@
                     android:fontFamily="@font/nunito_sans_semibold"
                     android:text="@{viewModel.weatherData.name}"
                     android:textColor="@color/white"
-                    android:textSize="40sp"
-                    app:layout_constraintEnd_toStartOf="@id/cb_favorite"
+                    android:textSize="38sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintTop_toBottomOf="@id/recyclerview_search"
                     tools:text="Sorocaba" />
-
-                <CheckBox
-                    android:id="@+id/cb_favorite"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    app:buttonTint="@color/yellow"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginStart="5dp"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_city"
-                    app:layout_constraintStart_toEndOf="@id/tv_city"
-                    app:layout_constraintTop_toTopOf="@id/tv_city"
-                    android:scaleX="2"
-                    android:scaleY="2"
-                    android:button="@drawable/selector_favorite"/>
 
                 <TextView
                     android:id="@+id/tv_city_state_country"
